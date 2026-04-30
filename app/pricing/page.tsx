@@ -248,7 +248,8 @@ export default function PricingPage() {
           <h2 className="text-2xl font-black text-stone-900 uppercase tracking-tight text-center mb-8">Common Questions</h2>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { q: 'What counts as a pack generation?', a: 'Each time you click "Generate Pack" and Claude creates worksheets, that counts as one generation toward your monthly limit.' },
+              { q: 'What counts as a pack generation?', a: 'Each time you click "Generate Pack" and our AI creates worksheets, that counts as one generation toward your monthly limit.' },
+
               { q: 'Can I still browse packs on the free plan?', a: 'Yes — free users can see the first 6 packs in the library. Upgrade to Student or higher to access the full library.' },
               { q: 'Why does the free plan only include Preschool-K?', a: 'The free plan is a taste of what\'s possible. Upgrade to Student for Grades 1-2, or Teacher/Educator for all grades.' },
               { q: 'When will paid plans be available?', a: 'Stripe payments are coming soon. Sign up free now and you\'ll be notified when paid plans launch.' },

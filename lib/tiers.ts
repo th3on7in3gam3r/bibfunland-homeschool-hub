@@ -8,11 +8,12 @@ export const TIERS = {
     color: 'stone',
     description: 'Generate Bible worksheet packs for any grade.',
     limits: {
-      packsPerMonth: 3,
+      packsPerMonth: 2,
       worksheetsPerPack: 6,
       visibleLibraryPacks: null,
-      grades: ['Preschool-K', 'Grades 1-2', 'Grades 3-4', 'Grades 5-6'],
+      grades: ['Preschool-K'],
       aiIdeas: 0,
+
       canEdit: false,
       canReorder: false,
     },

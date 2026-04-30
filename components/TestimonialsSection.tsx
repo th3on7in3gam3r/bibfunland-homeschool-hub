@@ -19,24 +19,25 @@ const SEED_TESTIMONIALS: Omit<Testimonial, 'createdBy'>[] = [
     id: 'seed-1',
     userName: 'Sarah M.',
     role: 'Homeschool Mom of 3',
-    content: "We used the Noah's Ark pack for our 6-year-old and she was completely engaged. The math problems using animal pairs were genius — she didn't even realize she was doing schoolwork!",
+    content: "The Noah's Ark pack was a lifesaver! My 6-year-old loved the animal matching math, and I loved that she was learning Scripture at the same time. It's so hard to find high-quality Christian materials that are actually academic.",
     rating: 5,
   },
   {
     id: 'seed-2',
-    userName: 'Pastor David K.',
-    role: "Children's Ministry Leader",
-    content: "I generated a David and Goliath pack for our Sunday school class in under a minute. The scripture integration is accurate and the activities are age-appropriate. This is a game changer.",
+    userName: 'Jessica L.',
+    role: 'Co-op Teacher',
+    content: "I use these for my weekly homeschool co-op. Being able to generate a full pack for different age groups in seconds has saved me hours of planning. The kids actually ask for the 'Bible Story Worksheets' now!",
     rating: 5,
   },
   {
     id: 'seed-3',
-    userName: 'Rebecca T.',
+    userName: 'Mark D.',
     role: 'Homeschool Dad',
-    content: "Finally a tool that doesn't make me choose between academics and faith. The Fruit of the Spirit pack had reading comprehension, writing prompts, AND a memory verse activity. My kids loved it.",
+    content: "Finally, something that isn't just coloring pages. The reading comprehension and writing prompts are solid. We used the 'Fruit of the Spirit' pack last week and it sparked such great conversations at lunch.",
     rating: 5,
   },
 ];
+
 
 export function TestimonialsSection() {
   const { user } = useAuth();

@@ -62,10 +62,11 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-5 leading-[1.05] tracking-tighter"
           >
-            Bible Truth Meets
+            Faith-Filled Worksheets,
             <br />
-            <span className="text-yellow-300">Academic Excellence</span>
+            <span className="text-yellow-300">Ready in Seconds.</span>
           </motion.h1>
+
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -73,9 +74,9 @@ export default function Home() {
             transition={{ delay: 0.2 }}
             className="text-base sm:text-xl text-blue-100 mb-10 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Generate printable worksheet packs for ages 3–12 in seconds. 
-            Every pack integrates Scripture with Math, Reading, and Writing.
+            Stop spending hours planning. Our Advanced AI generates customized Bible + Academic activity packs for your busy homeschool days.
           </motion.p>
+
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -90,11 +91,18 @@ export default function Home() {
               <Wand2 className="w-5 h-5" /> Create a Pack Free
             </Link>
             <Link
-              href="/browse"
+              href="/pack/sample-david-goliath"
               className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2 border-2 border-white/20 uppercase tracking-widest"
             >
-              <BookOpen className="w-5 h-5" /> Browse Library
+              <Download className="w-5 h-5" /> Download Sample
             </Link>
+            <Link
+              href="/browse"
+              className="bg-transparent hover:bg-white/5 text-blue-100 px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2 uppercase tracking-widest"
+            >
+              <BookOpen className="w-5 h-5" /> Browse All
+            </Link>
+
           </motion.div>
 
           {/* Stats strip */}
@@ -143,7 +151,7 @@ export default function Home() {
                 icon: Sparkles,
                 color: 'bg-yellow-50 text-yellow-600',
                 title: 'AI Generates Your Pack',
-                desc: 'Claude AI creates 6 unique worksheets — sequencing, math, reading, writing, and more — in about 30 seconds.',
+                desc: 'Our Advanced AI creates 6 unique worksheets — sequencing, math, reading, writing, and more — in about 30 seconds.',
               },
               {
                 step: '03',
@@ -191,9 +199,10 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
             <div>
               <div className="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest mb-3 border border-yellow-200">
-                <Sparkles className="w-3 h-3" /> Staff Picks
+                <Sparkles className="w-3 h-3" /> Start Here
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Featured Packs</h2>
+              <h2 className="text-3xl sm:text-4xl font-black text-stone-900 tracking-tight">Popular This Week</h2>
+
             </div>
             <Link
               href="/browse"
@@ -347,8 +356,19 @@ export default function Home() {
       {/* ── Lead Capture for Logged-out Users ───────────── */}
       {!user && <LeadCaptureSection />}
 
+      {/* Footer */}
       <Footer />
 
+      {/* Sticky Mobile Button */}
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[90%]">
+        <Link 
+          href="/browse"
+          className="flex items-center justify-center gap-2 bg-green-600 text-white py-4 rounded-2xl font-bold shadow-2xl animate-bounce-subtle"
+        >
+          <BookOpen className="w-5 h-5" />
+          Browse 100+ Free Packs
+        </Link>
+      </div>
     </div>
   );
 }
