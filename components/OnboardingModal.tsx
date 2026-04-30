@@ -11,59 +11,41 @@ import { useAuth } from './AuthProvider';
 
 const STORAGE_KEY = 'bfl_onboarded';
 
-const STEPS = [
-  {
-    icon: Wand2,
-    iconBg: 'bg-blue-100 text-blue-600',
-    title: 'Generate a Pack',
-    desc: 'Pick a Bible story and grade range. Claude AI creates worksheets in about 30 seconds.',
-  },
-  {
-    icon: BookOpen,
-    iconBg: 'bg-yellow-100 text-yellow-600',
-    title: 'Browse the Library',
-    desc: 'Explore packs created by other educators. Filter by category and grade range.',
-  },
-  {
-    icon: Printer,
-    iconBg: 'bg-green-100 text-green-600',
-    title: 'Print & Teach',
-    desc: 'Select the worksheets you want, preview them, and save as PDF.',
-  },
-];
 
-const ROLES = [
-  'Educator',
-  'Homeschool Mom',
-  'Homeschool Dad',
-  'Sunday School Teacher',
-  'Children\'s Ministry Leader',
-  'Parent',
-];
 
 export function OnboardingModal() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [show, setShow] = useState(false);
+  const [tierData, setTierData] = useState<any>(null);
 
   useEffect(() => {
-    if (loading || !user) return;
+    if (authLoading || !user) return;
     
     // Check if onboarded
     const alreadySeen = localStorage.getItem(STORAGE_KEY);
     if (alreadySeen) return;
 
+    // Fetch tier data
+    fetch('/api/user/tier')
+      .then(r => r.json())
+      .then(data => setTierData(data))
+      .catch(() => {});
+
     // Small delay so the page renders first
     const t = setTimeout(() => setShow(true), 800);
     return () => clearTimeout(t);
-  }, [user, loading]);
+  }, [user, authLoading]);
 
   const dismiss = () => {
     localStorage.setItem(STORAGE_KEY, '1');
     setShow(false);
-    // Fire and forget onboarding API
     fetch('/api/onboarding', { method: 'POST' }).catch(() => {});
   };
 
+  const planName = tierData?.tierName ?? 'Free';
+  const packsLimit = tierData?.packsLimit === null ? 'Unlimited' : (tierData?.packsLimit ?? '2');
+  const worksheetsLimit = tierData?.worksheetsLimit ?? '6';
+  const gradesLabel = tierData?.gradeRangeLabel ?? 'Preschool-K';
 
   return (
     <AnimatePresence>
@@ -102,19 +84,19 @@ export function OnboardingModal() {
                 Welcome to BibleFunLand!
               </h2>
               <p className="text-blue-200 text-sm font-medium">
-                You're on the <span className="text-yellow-300 font-black">Free Plan</span> — here's what you can do.
+                You're on the <span className="text-yellow-300 font-black">{planName} Plan</span> — here's what you can do.
               </p>
 
-              {/* Free tier summary */}
+              {/* Tier summary */}
               <div className="mt-5 grid grid-cols-3 gap-3">
                 {[
-                  { value: '3', label: 'Packs/month' },
-                  { value: '6', label: 'Worksheets' },
-                  { value: 'K–6', label: 'All grades' },
+                  { value: packsLimit, label: tierData?.packsLimit === null ? 'Packs' : 'Packs/month' },
+                  { value: worksheetsLimit, label: 'Worksheets' },
+                  { value: gradesLabel, label: 'Grades' },
                 ].map(({ value, label }) => (
-                  <div key={label} className="bg-white/10 rounded-2xl py-3 px-2 border border-white/10">
-                    <p className="text-2xl font-black text-white">{value}</p>
-                    <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest">{label}</p>
+                  <div key={label} className="bg-white/10 rounded-2xl py-3 px-2 border border-white/10 flex flex-col items-center justify-center min-h-[80px]">
+                    <p className={`font-black text-white ${String(value).length > 6 ? 'text-sm' : 'text-2xl'}`}>{value}</p>
+                    <p className="text-[9px] font-bold text-blue-300 uppercase tracking-widest text-center mt-1">{label}</p>
                   </div>
                 ))}
               </div>
@@ -122,7 +104,26 @@ export function OnboardingModal() {
 
             {/* Steps */}
             <div className="px-8 py-6 space-y-4">
-              {STEPS.map(({ icon: Icon, iconBg, title, desc }) => (
+              {[
+                {
+                  icon: Wand2,
+                  iconBg: 'bg-blue-100 text-blue-600',
+                  title: 'Generate a Pack',
+                  desc: 'Pick a Bible story and grade range. Our AI creates unique worksheets in about 30 seconds.',
+                },
+                {
+                  icon: BookOpen,
+                  iconBg: 'bg-yellow-100 text-yellow-600',
+                  title: 'Browse the Library',
+                  desc: 'Explore packs created by other educators. Filter by category and grade range.',
+                },
+                {
+                  icon: Printer,
+                  iconBg: 'bg-green-100 text-green-600',
+                  title: 'Print & Teach',
+                  desc: 'Select the worksheets you want, preview them, and save as PDF.',
+                },
+              ].map(({ icon: Icon, iconBg, title, desc }) => (
                 <div key={title} className="flex items-start gap-4">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
                     <Icon className="w-5 h-5" />
