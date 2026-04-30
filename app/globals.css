@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/* ── Base ─────────────────────────────────────────── */
+html {
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+body {
+  background-color: #FAFAF5 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent horizontal scroll on mobile */
+body, #__next {
+  overflow-x: hidden;
+}
+
+/* Larger tap targets on mobile */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Print ────────────────────────────────────────── */
+@layer utilities {
+  @media print {
+    .print-section {
+      box-shadow: none !important;
+      border: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      page-break-after: always;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    body {
+      background: white !important;
+    }
+  }
+
+  .whitespace-pre-wrap {
+    white-space: pre-wrap;
+  }
+}
