@@ -1,9 +1,16 @@
 import 'server-only';
 import Stripe from 'stripe';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-04-22.dahlia',
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.error('CRITICAL: STRIPE_SECRET_KEY is missing from environment variables!');
+}
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  apiVersion: '2025-12-15.clover' as any,
 });
+
+
+
 
 // Map tier keys to Stripe Price IDs
 export const TIER_PRICE_IDS: Record<string, string> = {

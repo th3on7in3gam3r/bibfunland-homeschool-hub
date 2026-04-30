@@ -9,25 +9,39 @@ export async function POST(req: Request) {
   }
 
   const { tier } = await req.json();
+  console.log('Checkout requested for tier:', tier, 'with Price IDs:', TIER_PRICE_IDS);
   const priceId = TIER_PRICE_IDS[tier];
+
   if (!priceId) {
     return NextResponse.json({ error: 'Invalid tier' }, { status: 400 });
   }
 
   const user = await currentUser();
   const email = user?.emailAddresses?.[0]?.emailAddress;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3001';
 
-  const session = await stripe.checkout.sessions.create({
-    mode: 'subscription',
-    payment_method_types: ['card'],
-    line_items: [{ price: priceId, quantity: 1 }],
-    customer_email: email,
-    metadata: { userId, tier },
-    subscription_data: { metadata: { userId, tier } },
-    success_url: `${appUrl}/profile?upgraded=true`,
-    cancel_url: `${appUrl}/pricing?cancelled=true`,
-  });
+  if (!email) {
+    return NextResponse.json({ error: 'User email not found. Please add an email to your account.' }, { status: 400 });
+  }
 
-  return NextResponse.json({ url: session.url });
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
+
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [{ price: priceId, quantity: 1 }],
+      customer_email: email,
+      metadata: { userId, tier },
+      subscription_data: { metadata: { userId, tier } },
+      success_url: `${appUrl}/profile?upgraded=true`,
+      cancel_url: `${appUrl}/pricing?cancelled=true`,
+    });
+
+    return NextResponse.json({ url: session.url });
+  } catch (err: any) {
+    console.error('Stripe Checkout Error:', err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
+
