@@ -4,11 +4,13 @@ import { BookOpen, Heart } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
+  { href: '/how-it-works', label: 'How It Works' },
   { href: '/browse', label: 'Library' },
   { href: '/generate', label: 'Create' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/profile', label: 'Profile' },
 ];
+
 
 const LEGAL_LINKS = [
   { href: '/privacy', label: 'Privacy Policy' },

@@ -147,7 +147,7 @@ export default function PricingPage() {
                 {/* Feature list */}
                 <ul className="space-y-2.5 flex-1 mb-6">
                   {[
-                    `${tier.limits.packsPerMonth === null ? 'Unlimited' : tier.limits.packsPerMonth} pack${tier.limits.packsPerMonth === 1 ? '' : 's'}/month`,
+                    `${tier.limits.packsPerMonth === null ? 'Unlimited' : tier.limits.packsPerMonth} pack${(tier.limits.packsPerMonth as number) === 1 ? '' : 's'}/month`,
                     `${tier.limits.worksheetsPerPack} of 6 worksheets per pack`,
                     tier.limits.visibleLibraryPacks === null ? 'Full library access' : `First ${tier.limits.visibleLibraryPacks} library packs`,
                     tier.limits.grades.length === 4 ? 'All grade ranges' : tier.limits.grades.join(' & '),

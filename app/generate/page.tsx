@@ -31,20 +31,73 @@ const SUGGESTED_THEMES = [
 ];
 
 const PRESET_TEMPLATES = [
+  // ── Original 3 ──────────────────────────────────────────────────────────
   {
     title: 'David and Goliath: Faith & Courage',
-    theme: "David and Goliath (1 Samuel 17). Include: 1. A size comparison chart. 2. Compare & Contrast activity between David and Saul's armor. 3. Questions: 'What made David brave?' and 'How does God help us face big problems?'. 4. Memory Verse: 1 Samuel 17:45-47.",
+    theme: "David and Goliath (1 Samuel 17). Include: 1. A size comparison chart activity. 2. Compare & Contrast between David and Saul's armor. 3. Discussion questions: 'What made David brave?' and 'How does God help us face big problems?'. 4. Memory Verse: 1 Samuel 17:45-47.",
     range: 'Grades 5-6',
   },
   {
     title: "Noah's Ark: Flood Math",
-    theme: "Noah's Ark Math focus. Include 5 specific problems: animal pairs (if there are 10 pairs of birds, how many wings?), counting 40 days/nights, ark dimensions, and food gathering. Memory Verse: Genesis 7:4.",
+    theme: "Noah's Ark Math focus (Genesis 6-9). Include 5 specific problems: animal pairs (if there are 10 pairs of birds, how many wings?), counting 40 days/nights, ark dimensions, and food gathering. Memory Verse: Genesis 7:4.",
     range: 'Grades 1-2',
   },
   {
     title: '7 Days of Creation Adventure',
-    theme: 'The 7 Days of Creation. Include: 1. Sequencing activity (Day 1-7). 2. Matching items to days. 3. A large coloring page for Day 7 (Rest). 4. Memory Verse: Genesis 2:2.',
+    theme: 'The 7 Days of Creation (Genesis 1-2). Include: 1. Sequencing activity (Day 1-7). 2. Matching items to days. 3. A large coloring page for Day 7 (Rest). 4. Memory Verse: Genesis 2:2.',
     range: 'Preschool-K',
+  },
+
+  // ── 10 New Templates (spec requirement) ─────────────────────────────────
+  {
+    title: 'Moses and the Burning Bush',
+    theme: "Moses and the Burning Bush (Exodus 3-4). Include: 1. Story sequencing cards (Moses tending flocks → burning bush → God speaks → Moses objects → God reassures). 2. Vocabulary matching: holy ground, I AM, staff, Pharaoh. 3. Writing prompt: 'If God called your name, what would you say?'. 4. Simple map tracing Moses's journey from Midian to Egypt. Memory Verse: Exodus 3:14.",
+    range: 'Grades 3-4',
+  },
+  {
+    title: 'The Good Samaritan: Loving Your Neighbor',
+    theme: "The Good Samaritan (Luke 10:25-37). Include: 1. Story retelling with 4 character cards (traveler, priest, Levite, Samaritan). 2. Reading comprehension questions. 3. Real-life application: 'Who is your neighbor? Draw 3 ways you can help someone this week.' 4. Character trait focus: compassion and kindness. Memory Verse: Luke 10:27.",
+    range: 'Grades 1-2',
+  },
+  {
+    title: 'Jonah and the Whale: Running from God',
+    theme: "Jonah and the Whale (Jonah 1-4). Include: 1. Story map with 5 scenes (Jonah runs → storm → overboard → inside the fish → Nineveh). 2. Ocean-themed math: counting fish, measuring the whale. 3. Discussion: 'Have you ever tried to run away from something hard? What happened?'. 4. Coloring activity of Jonah inside the great fish. Memory Verse: Jonah 2:1.",
+    range: 'Preschool-K',
+  },
+  {
+    title: 'The Birth of Jesus: The Nativity Story',
+    theme: "The Birth of Jesus — The Nativity (Luke 2:1-20, Matthew 2:1-12). Include: 1. Nativity scene character matching (Mary, Joseph, shepherds, wise men, angels, baby Jesus). 2. Sequencing the Christmas story in order. 3. Counting activity: 3 wise men, 1 star, 2 parents, many angels. 4. Creative drawing: 'Draw what you would bring as a gift for baby Jesus.' Memory Verse: Luke 2:11.",
+    range: 'Preschool-K',
+  },
+  {
+    title: "Daniel in the Lions' Den: Trusting God",
+    theme: "Daniel in the Lions' Den (Daniel 6). Include: 1. Story comprehension questions (Why was Daniel thrown in? What did the king do all night? What happened in the morning?). 2. Character study: Daniel's faith habits — praying 3 times a day. 3. Writing prompt: 'Describe a time you had to be brave and do the right thing even when it was hard.' 4. Lion-themed math word problems. Memory Verse: Daniel 6:22.",
+    range: 'Grades 3-4',
+  },
+  {
+    title: 'The Ten Commandments: God\'s Rules for Life',
+    theme: "The Ten Commandments (Exodus 20:1-17). Include: 1. Matching each commandment to a modern-day example. 2. Sorting activity: 'Loving God' commandments vs 'Loving Others' commandments. 3. Fill-in-the-blank with the commandments. 4. Discussion: 'Why do you think God gave us these rules?' Memory Verse: Exodus 20:3.",
+    range: 'Grades 3-4',
+  },
+  {
+    title: 'The Prodigal Son: Grace and Forgiveness',
+    theme: "The Prodigal Son (Luke 15:11-32). Include: 1. Story sequencing (son asks for inheritance → leaves → wastes money → returns → father celebrates). 2. Emotion chart: How did each character feel at each stage? 3. Writing prompt: 'Write about a time someone forgave you or you forgave someone.' 4. Vocabulary: prodigal, inheritance, repentance, grace, celebration. Memory Verse: Luke 15:24.",
+    range: 'Grades 5-6',
+  },
+  {
+    title: 'Esther Saves Her People: Courage for Such a Time',
+    theme: "Esther Saves Her People (Esther 4-5). Include: 1. Character web: Esther, Mordecai, King Ahasuerus, Haman — roles and motivations. 2. Reading comprehension with inference questions. 3. Writing prompt: 'Mordecai said Esther was made queen for such a time as this. What do you think YOU were made for?'. 4. Timeline of key events. Memory Verse: Esther 4:14.",
+    range: 'Grades 5-6',
+  },
+  {
+    title: 'The Sermon on the Mount: The Beatitudes',
+    theme: "The Sermon on the Mount — The Beatitudes (Matthew 5:1-12). Include: 1. Beatitudes matching activity (blessed are the... → for they shall...). 2. Illustrated booklet: draw a picture for each beatitude. 3. Discussion: 'Which beatitude is hardest to live out? Why?'. 4. Compare the Beatitudes to the world's idea of happiness. Memory Verse: Matthew 5:3.",
+    range: 'Grades 3-4',
+  },
+  {
+    title: 'The Road to Emmaus: Recognizing Jesus',
+    theme: "The Road to Emmaus (Luke 24:13-35). Include: 1. Story retelling with comprehension questions. 2. Map activity tracing the road from Jerusalem to Emmaus (7 miles). 3. Discussion: 'The disciples recognized Jesus when He broke bread. How do YOU recognize Jesus in your daily life?'. 4. Creative writing: 'Write a journal entry as one of the disciples on the road.' Memory Verse: Luke 24:31.",
+    range: 'Grades 5-6',
   },
 ];
 
@@ -61,6 +114,7 @@ export default function GeneratePage() {
   // Tier + usage state
   const [tier, setTier] = useState<TierKey>('free');
   const [usageData, setUsageData] = useState<{ used: number; limit: number | null } | null>(null);
+  const [showAllTemplates, setShowAllTemplates] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -154,7 +208,7 @@ export default function GeneratePage() {
                   Quick Templates
                 </label>
                 <div className="grid gap-3">
-                  {PRESET_TEMPLATES.map((tpl) => (
+                  {(showAllTemplates ? PRESET_TEMPLATES : PRESET_TEMPLATES.slice(0, 3)).map((tpl) => (
                     <button
                       key={tpl.title}
                       type="button"
@@ -176,6 +230,15 @@ export default function GeneratePage() {
                     </button>
                   ))}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAllTemplates((v) => !v)}
+                  className="w-full text-xs font-black text-blue-500 hover:text-blue-700 uppercase tracking-widest py-2 transition-colors"
+                >
+                  {showAllTemplates
+                    ? '↑ Show Less'
+                    : `+ Show ${PRESET_TEMPLATES.length - 3} More Templates`}
+                </button>
               </div>
 
               <div className="w-full h-px bg-stone-100" />
@@ -310,7 +373,7 @@ export default function GeneratePage() {
                 {atLimit ? (
                   <div className="text-center space-y-3">
                     <p className="text-sm font-bold text-stone-600 bg-amber-50 rounded-2xl p-4 border border-amber-100">
-                      You've used all {usageData?.limit} pack generation{usageData?.limit === 1 ? '' : 's'} for this month on the {TIERS[tier].name} plan.
+                      You've used all {usageData?.limit} pack generation{(usageData?.limit as number) === 1 ? '' : 's'} for this month on the {TIERS[tier].name} plan.
                     </p>
                     <Link
                       href="/pricing"

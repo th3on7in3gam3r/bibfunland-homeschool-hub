@@ -108,9 +108,9 @@ export function OnboardingModal() {
               {/* Free tier summary */}
               <div className="mt-5 grid grid-cols-3 gap-3">
                 {[
-                  { value: '1', label: 'Pack/month' },
-                  { value: '3', label: 'Worksheets' },
-                  { value: 'K', label: 'Grade range' },
+                  { value: '3', label: 'Packs/month' },
+                  { value: '6', label: 'Worksheets' },
+                  { value: 'K–6', label: 'All grades' },
                 ].map(({ value, label }) => (
                   <div key={label} className="bg-white/10 rounded-2xl py-3 px-2 border border-white/10">
                     <p className="text-2xl font-black text-white">{value}</p>

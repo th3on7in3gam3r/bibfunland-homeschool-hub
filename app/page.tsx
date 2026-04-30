@@ -13,8 +13,11 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { PackCardSkeleton } from '@/components/PackCardSkeleton';
+import { LeadCaptureSection } from '@/components/LeadCaptureSection';
+import { useAuth } from '@/components/AuthProvider';
 
 export default function Home() {
+  const { user } = useAuth();
   const [featuredPacks, setFeaturedPacks] = useState<any[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
 
@@ -102,9 +105,9 @@ export default function Home() {
             className="mt-14 grid grid-cols-3 gap-4 max-w-lg mx-auto"
           >
             {[
-              { icon: FileText, value: '6', label: 'Worksheets per pack' },
-              { icon: Users, value: 'K–6', label: 'All grade ranges' },
-              { icon: Book, value: '100%', label: 'Scripture-based' },
+              { icon: FileText, value: '30s', label: 'Pack ready to print' },
+              { icon: Users, value: '3–12', label: 'Ages served' },
+              { icon: Book, value: '100%', label: 'Scripture-grounded' },
             ].map(({ icon: Icon, value, label }) => (
               <div key={label} className="text-center">
                 <Icon className="w-5 h-5 text-yellow-300 mx-auto mb-1" />
@@ -237,15 +240,23 @@ export default function Home() {
                       </p>
 
                       <div className="mt-5 pt-4 border-t border-stone-50 flex items-center justify-between">
-                        {pack.category && (
-                          <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">
-                            {pack.category}
-                          </span>
-                        )}
+                        <div className="flex items-center gap-3">
+                          {pack.category && (
+                            <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">
+                              {pack.category}
+                            </span>
+                          )}
+                          {pack.favoriteCount > 0 && (
+                            <span className="flex items-center gap-1 text-[10px] font-black text-stone-400 uppercase tracking-widest">
+                              <Heart className="w-3 h-3 text-red-400 fill-red-400" /> {pack.favoriteCount}
+                            </span>
+                          )}
+                        </div>
                         <span className="ml-auto flex items-center gap-1 text-blue-500 font-black text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
                           Open <Printer className="w-3.5 h-3.5" />
                         </span>
                       </div>
+
                     </div>
                   </Link>
                 </motion.div>
@@ -333,7 +344,11 @@ export default function Home() {
       {/* ── Testimonials ─────────────────────────────────── */}
       <TestimonialsSection />
 
+      {/* ── Lead Capture for Logged-out Users ───────────── */}
+      {!user && <LeadCaptureSection />}
+
       <Footer />
+
     </div>
   );
 }

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Search, Scroll, ArrowRight, Grid, List as ListIcon,
-  BookOpen, Wand2, FileText, X, SlidersHorizontal, Lock,
+  BookOpen, Wand2, FileText, X, SlidersHorizontal, Lock, Heart,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -18,7 +18,9 @@ interface Pack {
   gradeRange: string;
   theme: string;
   category: string;
+  favoriteCount: number;
 }
+
 
 const CATEGORY_COLORS: Record<string, { chip: string; dot: string }> = {
   'Bible Story':        { chip: 'bg-blue-50 text-blue-600 border-blue-200',   dot: 'bg-blue-500' },
@@ -350,13 +352,21 @@ export default function BrowsePage() {
 
                     {/* Footer */}
                     <div className="mt-5 pt-4 border-t border-stone-50 flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-[10px] font-black text-stone-300 uppercase tracking-widest">
-                        <FileText className="w-3.5 h-3.5" /> 6 Worksheets
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1 text-[10px] font-black text-stone-300 uppercase tracking-widest">
+                          <FileText className="w-3.5 h-3.5" /> 6 Sheets
+                        </div>
+                        {pack.favoriteCount > 0 && (
+                          <div className="flex items-center gap-1 text-[10px] font-black text-stone-300 uppercase tracking-widest">
+                            <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" /> {pack.favoriteCount}
+                          </div>
+                        )}
                       </div>
                       <span className="flex items-center gap-1 text-blue-500 font-black text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform">
                         Open <ArrowRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
+
                   </div>
                 </Link>
               </motion.div>
@@ -387,11 +397,19 @@ export default function BrowsePage() {
                   </div>
 
                   {/* Worksheet count */}
-                  <span className="text-[10px] font-black text-stone-300 uppercase tracking-widest hidden sm:block shrink-0">
-                    6 sheets
-                  </span>
+                  <div className="flex items-center gap-4 hidden sm:flex shrink-0">
+                    {pack.favoriteCount > 0 && (
+                      <span className="flex items-center gap-1 text-[10px] font-black text-stone-300 uppercase tracking-widest">
+                        <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" /> {pack.favoriteCount}
+                      </span>
+                    )}
+                    <span className="text-[10px] font-black text-stone-300 uppercase tracking-widest">
+                      6 Sheets
+                    </span>
+                  </div>
 
                   <ArrowRight className="w-4 h-4 text-stone-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all shrink-0" />
+
                 </div>
               </Link>
             ))}

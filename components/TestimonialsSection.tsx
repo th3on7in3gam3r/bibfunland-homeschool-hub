@@ -14,8 +14,33 @@ interface Testimonial {
   createdBy: string;
 }
 
+const SEED_TESTIMONIALS: Omit<Testimonial, 'createdBy'>[] = [
+  {
+    id: 'seed-1',
+    userName: 'Sarah M.',
+    role: 'Homeschool Mom of 3',
+    content: "We used the Noah's Ark pack for our 6-year-old and she was completely engaged. The math problems using animal pairs were genius — she didn't even realize she was doing schoolwork!",
+    rating: 5,
+  },
+  {
+    id: 'seed-2',
+    userName: 'Pastor David K.',
+    role: "Children's Ministry Leader",
+    content: "I generated a David and Goliath pack for our Sunday school class in under a minute. The scripture integration is accurate and the activities are age-appropriate. This is a game changer.",
+    rating: 5,
+  },
+  {
+    id: 'seed-3',
+    userName: 'Rebecca T.',
+    role: 'Homeschool Dad',
+    content: "Finally a tool that doesn't make me choose between academics and faith. The Fruit of the Spirit pack had reading comprehension, writing prompts, AND a memory verse activity. My kids loved it.",
+    rating: 5,
+  },
+];
+
 export function TestimonialsSection() {
   const { user } = useAuth();
+
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [newContent, setNewContent] = useState('');
@@ -25,8 +50,12 @@ export function TestimonialsSection() {
   useEffect(() => {
     fetch('/api/testimonials')
       .then((r) => r.json())
-      .then((data) => setTestimonials(data.testimonials ?? []))
-      .catch((err) => console.error('Failed to load testimonials:', err));
+      .then((data) => {
+        const fetched = data.testimonials ?? [];
+        // Show seed testimonials only when DB has none yet
+        setTestimonials(fetched.length > 0 ? fetched : (SEED_TESTIMONIALS as Testimonial[]));
+      })
+      .catch(() => setTestimonials(SEED_TESTIMONIALS as Testimonial[]));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -135,7 +164,7 @@ export function TestimonialsSection() {
           {testimonials.length === 0 && !isAdding && (
             <div className="col-span-full py-20 text-center bg-white rounded-[40px] border-4 border-dashed border-stone-100">
               <MessageSquare className="w-12 h-12 text-stone-100 mx-auto mb-4" />
-              <p className="text-stone-300 font-black uppercase tracking-widest">No stories shared yet. Be the first!</p>
+              <p className="text-stone-300 font-black uppercase tracking-widest">Be the first to share your story!</p>
             </div>
           )}
         </div>

@@ -43,16 +43,19 @@ export async function GET(req: NextRequest) {
     const tier = userId ? await getUserTier(userId) : 'free';
     const visibleLimit = TIERS[tier].limits.visibleLibraryPacks;
     const effectiveLimit = visibleLimit === null ? limit : Math.min(limit, visibleLimit);
-
-    let sql = `SELECT * FROM packs`;
+    let sql = `
+      SELECT p.*, COUNT(f.pack_id) as favorite_count 
+      FROM packs p 
+      LEFT JOIN favorites f ON p.id = f.pack_id
+    `;
     const args: any[] = [];
     const conditions: string[] = [];
 
-    if (featuredOnly) conditions.push(`is_featured = 1`);
-    if (category) { conditions.push(`category = ?`); args.push(category); }
+    if (featuredOnly) conditions.push(`p.is_featured = 1`);
+    if (category) { conditions.push(`p.category = ?`); args.push(category); }
 
     if (conditions.length) sql += ` WHERE ` + conditions.join(' AND ');
-    sql += ` ORDER BY created_at DESC LIMIT ?`;
+    sql += ` GROUP BY p.id ORDER BY p.created_at DESC LIMIT ?`;
     args.push(effectiveLimit);
 
     const result = await db.execute({ sql, args });
@@ -67,7 +70,9 @@ export async function GET(req: NextRequest) {
       isFeatured: Boolean(r.is_featured),
       createdBy: r.created_by,
       createdAt: r.created_at,
+      favoriteCount: Number(r.favorite_count || 0),
     }));
+
 
     return NextResponse.json({ packs, tier, visibleLimit });
   } catch (err: any) {
@@ -108,7 +113,7 @@ export async function POST(req: NextRequest) {
       const limit = TIERS[tier].limits.packsPerMonth;
       return NextResponse.json(
         {
-          error: `You've used all ${limit} pack generation${limit === 1 ? '' : 's'} for this month on the ${TIERS[tier].name} plan.`,
+          error: `You've used all ${limit} pack generation${(limit as number) === 1 ? '' : 's'} for this month on the ${TIERS[tier].name} plan.`,
           upgradeRequired: true,
           tier,
         },

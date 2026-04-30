@@ -80,8 +80,19 @@ export async function initDB() {
   } catch (e) {}
 
 
+  // Leads table for email capture
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS leads (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT UNIQUE NOT NULL,
+      source TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    )
+  `);
+
   initialized = true;
 }
+
 
 /** Call at the top of every API route handler to ensure tables exist. */
 export async function ensureDB() {
