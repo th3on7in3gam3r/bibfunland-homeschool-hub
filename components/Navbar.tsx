@@ -5,13 +5,15 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from './AuthProvider';
 import { SignInButton } from '@clerk/nextjs';
-import { LogOut, UserCircle, BookOpen, Wand2, Menu, X, ExternalLink, Sparkles, Shield } from 'lucide-react';
+import { LogOut, UserCircle, BookOpen, Wand2, Menu, X, ExternalLink, Sparkles, Shield, LayoutGrid } from 'lucide-react';
 
 const navLinks = [
   { href: '/browse', label: 'Library', icon: BookOpen },
+  { href: '/my-packs', label: 'My Packs', icon: LayoutGrid },
   { href: '/generate', label: 'Create', icon: Wand2 },
   { href: '/pricing', label: 'Pricing', icon: Sparkles },
 ];
+
 
 export function Navbar() {
   const { user, logout } = useAuth();

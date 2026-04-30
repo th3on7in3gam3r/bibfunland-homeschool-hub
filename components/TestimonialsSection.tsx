@@ -122,10 +122,9 @@ export function TestimonialsSection() {
             >
               <Plus className="w-4 h-4" /> Share Your Story
             </button>
-          ) : (
-            <p className="text-stone-400 font-bold text-xs uppercase tracking-widest">Sign in to leave a review</p>
           )}
         </div>
+
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>

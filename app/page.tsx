@@ -62,10 +62,11 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-5 leading-[1.05] tracking-tighter"
           >
-            Faith-Filled Worksheets,
+            Faith-Filled Worksheets
             <br />
-            <span className="text-yellow-300">Ready in Seconds.</span>
+            <span className="text-yellow-300">in Seconds.</span>
           </motion.h1>
+
 
 
           <motion.p
@@ -91,11 +92,12 @@ export default function Home() {
               <Wand2 className="w-5 h-5" /> Create a Pack Free
             </Link>
             <Link
-              href="/pack/sample-david-goliath"
+              href="/browse"
               className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2 border-2 border-white/20 uppercase tracking-widest"
             >
-              <Download className="w-5 h-5" /> Download Sample
+              <Download className="w-5 h-5" /> Free Starter Packs
             </Link>
+
             <Link
               href="/browse"
               className="bg-transparent hover:bg-white/5 text-blue-100 px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2 uppercase tracking-widest"
@@ -150,8 +152,9 @@ export default function Home() {
                 step: '02',
                 icon: Sparkles,
                 color: 'bg-yellow-50 text-yellow-600',
-                title: 'AI Generates Your Pack',
-                desc: 'Our Advanced AI creates 6 unique worksheets — sequencing, math, reading, writing, and more — in about 30 seconds.',
+                title: 'Our AI Generates Your Pack',
+                desc: 'Our AI instantly creates 6 unique worksheets — sequencing, math, reading, writing, and more — in about 30 seconds.',
+
               },
               {
                 step: '03',

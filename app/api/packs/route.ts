@@ -37,12 +37,14 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') ?? '50');
     const category = searchParams.get('category');
     const featuredOnly = searchParams.get('featured') === 'true';
-
-    // Determine how many packs this user can see
+    const mineOnly = searchParams.get('mine') === 'true';
     const { userId } = await auth();
+
+    // Determine how many packs this user can see (only applies to library browsing, not "mine")
     const tier = userId ? await getUserTier(userId) : 'free';
     const visibleLimit = TIERS[tier].limits.visibleLibraryPacks;
-    const effectiveLimit = visibleLimit === null ? limit : Math.min(limit, visibleLimit);
+    const effectiveLimit = (visibleLimit === null || mineOnly) ? limit : Math.min(limit, visibleLimit);
+
     let sql = `
       SELECT p.*, COUNT(f.pack_id) as favorite_count 
       FROM packs p 
@@ -51,14 +53,21 @@ export async function GET(req: NextRequest) {
     const args: any[] = [];
     const conditions: string[] = [];
 
-    if (featuredOnly) conditions.push(`p.is_featured = 1`);
-    if (category) { conditions.push(`p.category = ?`); args.push(category); }
+    if (mineOnly) {
+      if (!userId) return NextResponse.json({ error: 'Sign in to see your packs' }, { status: 401 });
+      conditions.push(`p.created_by = ?`);
+      args.push(userId);
+    } else {
+      if (featuredOnly) conditions.push(`p.is_featured = 1`);
+      if (category) { conditions.push(`p.category = ?`); args.push(category); }
+    }
 
     if (conditions.length) sql += ` WHERE ` + conditions.join(' AND ');
     sql += ` GROUP BY p.id ORDER BY p.created_at DESC LIMIT ?`;
     args.push(effectiveLimit);
 
     const result = await db.execute({ sql, args });
+
 
     const packs = result.rows.map((r) => ({
       id: r.id,
