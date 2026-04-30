@@ -9,8 +9,18 @@ export async function POST(req: Request) {
   }
 
   const { tier } = await req.json();
-  console.log('Checkout requested for tier:', tier, 'with Price IDs:', TIER_PRICE_IDS);
+  
+  // LOGGING FOR VERCEL DEBUGGING
+  console.log('--- DEBUG: STRIPE CHECKOUT START ---');
+  console.log('Tier:', tier);
+  console.log('STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
+  console.log('STRIPE_PRICE_STUDENT exists:', !!process.env.STRIPE_PRICE_STUDENT);
+  console.log('STRIPE_PRICE_TEACHER exists:', !!process.env.STRIPE_PRICE_TEACHER);
+  console.log('STRIPE_PRICE_EDUCATOR exists:', !!process.env.STRIPE_PRICE_EDUCATOR);
+  console.log('NEXT_PUBLIC_APP_URL:', process.env.NEXT_PUBLIC_APP_URL);
+  
   const priceId = TIER_PRICE_IDS[tier];
+
 
   if (!priceId) {
     return NextResponse.json({ error: 'Invalid tier' }, { status: 400 });
