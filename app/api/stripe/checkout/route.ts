@@ -49,9 +49,16 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ url: session.url });
-  } catch (err: any) {
-    console.error('Stripe Checkout Error:', err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (error: any) {
+    console.error('Stripe Checkout Error:', error);
+    return NextResponse.json({ 
+      error: 'Internal server error', 
+      details: error instanceof Error ? error.message : String(error),
+      env_check: {
+        has_key: !!process.env.STRIPE_SECRET_KEY,
+        has_student_price: !!process.env.STRIPE_PRICE_STUDENT,
+        app_url: process.env.NEXT_PUBLIC_APP_URL
+      }
+    }, { status: 500 });
   }
 }
-
