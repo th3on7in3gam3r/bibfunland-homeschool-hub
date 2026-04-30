@@ -13,14 +13,14 @@ import { PackCardSkeleton } from '@/components/PackCardSkeleton';
 import { useAuth } from '@/components/AuthProvider';
 
 export default function MyPacksPage() {
-  const { user, isLoaded } = useAuth();
+  const { user, loading } = useAuth();
   const [packs, setPacks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (loading) return;
     if (!user) {
-      setLoading(false);
+      setDataLoading(false);
       return;
     }
 
@@ -28,15 +28,16 @@ export default function MyPacksPage() {
       .then((r) => r.json())
       .then((data) => {
         setPacks(data.packs ?? []);
-        setLoading(false);
+        setDataLoading(false);
       })
       .catch((err) => {
         console.error('Failed to load your packs:', err);
-        setLoading(false);
+        setDataLoading(false);
       });
-  }, [user, isLoaded]);
+  }, [user, loading]);
 
-  if (isLoaded && !user) {
+  if (!loading && !user) {
+
     return (
       <div className="min-h-screen bg-[#FAFAF5]">
         <Navbar />
@@ -82,11 +83,12 @@ export default function MyPacksPage() {
           </Link>
         </div>
 
-        {loading ? (
+        {dataLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => <PackCardSkeleton key={i} />)}
           </div>
         ) : packs.length > 0 ? (
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {packs.map((pack, index) => (
               <motion.div

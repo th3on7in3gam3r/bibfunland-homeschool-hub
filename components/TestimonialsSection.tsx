@@ -115,7 +115,7 @@ export function TestimonialsSection() {
             <h2 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Community Voices</h2>
             <h3 className="text-4xl font-black text-stone-900 tracking-tight">Parent Testimonials</h3>
           </div>
-          {user ? (
+          {user && (
             <button
               onClick={() => setIsAdding(true)}
               className="bg-blue-600 text-white px-6 py-3 rounded-2xl font-black text-sm hover:bg-blue-500 transition-all flex items-center gap-2 shadow-lg border-b-4 border-blue-800 uppercase tracking-widest"
