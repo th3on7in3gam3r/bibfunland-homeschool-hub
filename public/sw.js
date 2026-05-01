@@ -1,7 +1,7 @@
 // BibleFunLand Homeschool Hub — Service Worker
 // Handles offline caching, background sync, and push notifications
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'build-1777655633477-478e53d2';
 const STATIC_CACHE = `bfl-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `bfl-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `bfl-images-${CACHE_VERSION}`;
@@ -49,6 +49,13 @@ self.addEventListener('activate', (event) => {
   );
   // Take control of all open clients immediately
   self.clients.claim();
+});
+
+// Allow the client to trigger activation of waiting SW
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // ── Fetch Strategy ───────────────────────────────────────────────────────────
