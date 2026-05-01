@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { WifiOff, BookOpen, RefreshCw } from 'lucide-react';
 
