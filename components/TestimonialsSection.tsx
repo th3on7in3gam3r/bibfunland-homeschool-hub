@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Star, MessageSquare, Quote, X, Plus, Loader2, Trash2 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
@@ -47,6 +47,24 @@ export function TestimonialsSection() {
   const [newContent, setNewContent] = useState('');
   const [newRating, setNewRating] = useState(5);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const modalCloseRef = useRef<HTMLButtonElement>(null);
+
+  // Focus close button when testimonial modal opens
+  useEffect(() => {
+    if (isAdding) {
+      setTimeout(() => modalCloseRef.current?.focus(), 50);
+    }
+  }, [isAdding]);
+
+  // Close testimonial modal on Escape
+  useEffect(() => {
+    if (!isAdding) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsAdding(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isAdding]);
 
   useEffect(() => {
     fetch('/api/testimonials')
@@ -173,16 +191,21 @@ export function TestimonialsSection() {
       {/* Add Testimonial Modal */}
       <AnimatePresence>
         {isAdding && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-12">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-12"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="testimonial-modal-title"
+          >
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setIsAdding(false)}
               className="absolute inset-0 bg-stone-950/40 backdrop-blur-sm" />
             <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className="relative w-full max-w-xl bg-white rounded-[40px] shadow-2xl p-8 sm:p-12 border-4 border-stone-100">
-              <button onClick={() => setIsAdding(false)} className="absolute top-8 right-8 p-2 rounded-xl hover:bg-stone-50 text-stone-400 hover:text-stone-900 transition-all">
+              <button ref={modalCloseRef} onClick={() => setIsAdding(false)} className="absolute top-8 right-8 p-2 rounded-xl hover:bg-stone-50 text-stone-400 hover:text-stone-900 transition-all" aria-label="Close">
                 <X className="w-6 h-6" />
               </button>
-              <h3 className="text-3xl font-black text-stone-900 mb-2 tracking-tight">Share Your Experience</h3>
+              <h3 id="testimonial-modal-title" className="text-3xl font-black text-stone-900 mb-2 tracking-tight">Share Your Experience</h3>
               <p className="text-stone-400 font-bold text-xs uppercase tracking-widest mb-8">How has BibleFunLand helped your family?</p>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>

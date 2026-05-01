@@ -1,7 +1,7 @@
 // BibleFunLand Homeschool Hub — Service Worker
 // Handles offline caching, background sync, and push notifications
 
-const CACHE_VERSION = 'build-1777655633477-478e53d2';
+const CACHE_VERSION = 'build-1777656708888-03085aeb';
 const STATIC_CACHE = `bfl-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `bfl-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `bfl-images-${CACHE_VERSION}`;

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db, ensureDB } from '@/lib/db';
+import { isAdmin } from '@/lib/admin';
 
 // PATCH /api/packs/[id]/feature — admin-only toggle for is_featured
 export async function PATCH(
@@ -13,8 +14,7 @@ export async function PATCH(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const adminId = process.env.ADMIN_USER_ID;
-  if (!adminId || userId !== adminId) {
+  if (!isAdmin(userId)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
@@ -38,7 +38,7 @@ export async function PATCH(
     });
 
     return NextResponse.json({ ok: true, isFeatured });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: (err instanceof Error ? err.message : 'Server error') }, { status: 500 });
   }
 }

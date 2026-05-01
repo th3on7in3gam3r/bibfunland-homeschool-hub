@@ -13,6 +13,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { useAuth } from '@/components/AuthProvider';
 import { PACK_CATEGORIES } from '@/lib/constants';
+import type { WorksheetIdea } from '@/lib/types';
 import { SignInButton } from '@clerk/nextjs';
 import {
   DndContext, closestCenter, KeyboardSensor, PointerSensor,
@@ -199,7 +200,7 @@ export default function PackPage() {
   const [selectedWorksheets, setSelectedWorksheets] = useState<Set<string>>(new Set());
 
   // AI ideas state
-  const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<WorksheetIdea[]>([]);
   const [isGeneratingIdeas, setIsGeneratingIdeas] = useState(false);
   const [addingIdeaId, setAddingIdeaId] = useState<number | null>(null);
 

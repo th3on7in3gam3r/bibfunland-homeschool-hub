@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db, ensureDB } from '@/lib/db';
+import { getUserTier } from '@/lib/subscription';
+import { TIERS } from '@/lib/tiers';
 import { randomUUID } from 'crypto';
 
 // POST /api/packs/[id]/worksheets — add a worksheet to a pack
@@ -17,6 +19,33 @@ export async function POST(
   const { id } = await params;
 
   try {
+    // Ownership check — verify the pack belongs to the requesting user
+    const packResult = await db.execute({
+      sql: `SELECT created_by FROM packs WHERE id = ?`,
+      args: [id],
+    });
+
+    if (packResult.rows.length === 0) {
+      return NextResponse.json({ error: 'Pack not found' }, { status: 404 });
+    }
+
+    if (packResult.rows[0].created_by !== userId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Tier check — user must have edit permission
+    const tier = await getUserTier(userId);
+    if (!TIERS[tier].limits.canEdit) {
+      return NextResponse.json(
+        {
+          error: `Your ${TIERS[tier].name} plan does not allow adding worksheets. Upgrade to access this feature.`,
+          upgradeRequired: true,
+          tier,
+        },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const { title, gradeLevel, objective, parentInstructions, contentMarkup, bibleVerse } = body;
 
@@ -38,7 +67,9 @@ export async function POST(
     });
 
     return NextResponse.json({ id: wsId });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    console.error('Worksheet insert error:', err);
+    const message = err instanceof Error ? err.message : 'Failed to add worksheet';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

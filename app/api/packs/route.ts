@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
       FROM packs p 
       LEFT JOIN favorites f ON p.id = f.pack_id
     `;
-    const args: any[] = [];
+    const args: (string | number)[] = [];
     const conditions: string[] = [];
 
     if (mineOnly) {
@@ -84,8 +84,8 @@ export async function GET(req: NextRequest) {
 
 
     return NextResponse.json({ packs, tier, visibleLimit });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }
 
@@ -152,17 +152,14 @@ export async function POST(req: NextRequest) {
     const now = new Date().toISOString();
     const resolvedCategory = category ?? 'Bible Story';
 
-    // Insert pack
-    await db.execute({
-      sql: `INSERT INTO packs (id, title, overview, grade_range, theme, category, created_by, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [packId, packData.title, packData.overview, gradeRange, theme, resolvedCategory, userId, now],
-    });
-
-    // Insert worksheets
-    for (let i = 0; i < packData.worksheets.length; i++) {
-      const ws = packData.worksheets[i];
-      await db.execute({
+    // Build all inserts and execute them atomically in a single batch (transaction)
+    const statements = [
+      {
+        sql: `INSERT INTO packs (id, title, overview, grade_range, theme, category, created_by, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [packId, packData.title, packData.overview, gradeRange, theme, resolvedCategory, userId, now] as (string | number | null)[],
+      },
+      ...packData.worksheets.map((ws, i) => ({
         sql: `INSERT INTO worksheets (id, pack_id, title, grade_level, objective, parent_instructions, content_markup, bible_verse, sort_order, created_at)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         args: [
@@ -176,9 +173,11 @@ export async function POST(req: NextRequest) {
           ws.bibleVerse,
           i,
           now,
-        ],
-      });
-    }
+        ] as (string | number | null)[],
+      })),
+    ];
+
+    await db.batch(statements, 'write');
 
     // Send email notification (fire and forget)
     try {
@@ -193,10 +192,12 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ packId });
 
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Pack generation error:', err);
-    const message = err?.error?.error?.message ?? err?.message ?? 'Generation failed';
-    const status = err?.status === 400 ? 400 : 500;
+    const message =
+      (err as { error?: { error?: { message?: string } } })?.error?.error?.message ??
+      (err instanceof Error ? err.message : 'Generation failed');
+    const status = (err as { status?: number })?.status === 400 ? 400 : 500;
     return NextResponse.json({ error: message }, { status });
   }
 }

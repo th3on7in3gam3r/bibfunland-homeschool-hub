@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db, ensureDB } from '@/lib/db';
 import { generateWorksheetIdeas } from '@/lib/ai';
+import { getUserTier, getMonthlyUsage } from '@/lib/subscription';
+import { TIERS, canGeneratePack } from '@/lib/tiers';
 
 export const maxDuration = 60;
 
@@ -19,8 +21,9 @@ export async function POST(
   const { id } = await params;
 
   try {
+    // Ownership check — verify the pack belongs to the requesting user
     const packResult = await db.execute({
-      sql: `SELECT title, overview, grade_range FROM packs WHERE id = ?`,
+      sql: `SELECT title, overview, grade_range, created_by FROM packs WHERE id = ?`,
       args: [id],
     });
 
@@ -29,6 +32,38 @@ export async function POST(
     }
 
     const pack = packResult.rows[0];
+    if (pack.created_by !== userId) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Tier check — user must have aiIdeas quota > 0
+    const tier = await getUserTier(userId);
+    const aiIdeasQuota = TIERS[tier].limits.aiIdeas;
+    if (aiIdeasQuota === 0) {
+      return NextResponse.json(
+        {
+          error: `Your ${TIERS[tier].name} plan does not include AI worksheet ideas. Upgrade to access this feature.`,
+          upgradeRequired: true,
+          tier,
+        },
+        { status: 403 }
+      );
+    }
+
+    // Monthly usage check — ensure the user hasn't exceeded their pack generation limit
+    const used = await getMonthlyUsage(userId);
+    if (!canGeneratePack(tier, used)) {
+      const limit = TIERS[tier].limits.packsPerMonth;
+      return NextResponse.json(
+        {
+          error: `You've used all ${limit} pack generation${(limit as number) === 1 ? '' : 's'} for this month on the ${TIERS[tier].name} plan.`,
+          upgradeRequired: true,
+          tier,
+        },
+        { status: 403 }
+      );
+    }
+
     const ideas = await generateWorksheetIdeas(
       pack.title as string,
       pack.overview as string,
@@ -36,8 +71,9 @@ export async function POST(
     );
 
     return NextResponse.json({ ideas });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Ideas generation error:', err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    const message = err instanceof Error ? err.message : 'Generation failed';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

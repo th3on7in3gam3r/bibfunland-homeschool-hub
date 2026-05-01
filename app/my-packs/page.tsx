@@ -11,10 +11,11 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { PackCardSkeleton } from '@/components/PackCardSkeleton';
 import { useAuth } from '@/components/AuthProvider';
+import type { Pack } from '@/lib/types';
 
 export default function MyPacksPage() {
   const { user, loading } = useAuth();
-  const [packs, setPacks] = useState<any[]>([]);
+  const [packs, setPacks] = useState<Pack[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {

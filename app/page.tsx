@@ -15,10 +15,11 @@ import { TestimonialsSection } from '@/components/TestimonialsSection';
 import { PackCardSkeleton } from '@/components/PackCardSkeleton';
 import { LeadCaptureSection } from '@/components/LeadCaptureSection';
 import { useAuth } from '@/components/AuthProvider';
+import type { Pack } from '@/lib/types';
 
 export default function Home() {
   const { user } = useAuth();
-  const [featuredPacks, setFeaturedPacks] = useState<any[]>([]);
+  const [featuredPacks, setFeaturedPacks] = useState<Pack[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {

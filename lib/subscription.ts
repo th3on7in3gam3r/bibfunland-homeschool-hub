@@ -1,5 +1,6 @@
 import 'server-only';
 import { db } from './db';
+import { isAdmin } from './admin';
 import type { TierKey } from './tiers';
 
 // Server-side only — never import in client components
@@ -9,8 +10,8 @@ import type { TierKey } from './tiers';
  * Admin always gets 'educator'. Otherwise reads from subscriptions table.
  */
 export async function getUserTier(userId: string): Promise<TierKey> {
-  // Admin bypass — env only, no hardcoded IDs
-  if (process.env.ADMIN_USER_ID && userId === process.env.ADMIN_USER_ID) return 'educator';
+  // Admin bypass
+  if (isAdmin(userId)) return 'educator';
 
   try {
     const result = await db.execute({

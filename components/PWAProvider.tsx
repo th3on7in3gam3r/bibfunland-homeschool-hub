@@ -3,13 +3,21 @@
 import { useEffect, useState } from 'react';
 import { Download, X } from 'lucide-react';
 
+// BeforeInstallPromptEvent is not yet in the standard TypeScript lib
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  readonly userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 export function PWAProvider() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
   const [showUpdateBanner, setShowUpdateBanner] = useState(false);
   const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
 
   useEffect(() => {
+    let updateIntervalId: ReturnType<typeof setInterval> | null = null;
+
     // Register service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -48,7 +56,7 @@ export function PWAProvider() {
             });
 
             // Check for updates every 60 seconds
-            setInterval(() => reg.update(), 60_000);
+            updateIntervalId = setInterval(() => reg.update(), 60_000);
           })
           .catch((err) => {
             console.warn('[PWA] Service Worker registration failed:', err);
@@ -59,7 +67,7 @@ export function PWAProvider() {
     // Capture the install prompt (Android/Chrome)
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
 
       // Only show banner if user hasn't dismissed it before
       const dismissed = localStorage.getItem('pwa-install-dismissed');
@@ -78,7 +86,10 @@ export function PWAProvider() {
       console.log('[PWA] App installed successfully');
     });
 
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+      if (updateIntervalId !== null) clearInterval(updateIntervalId);
+    };
   }, []);
 
   const handleInstall = async () => {

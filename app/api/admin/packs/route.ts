@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { db, ensureDB } from '@/lib/db';
+import { isAdmin } from '@/lib/admin';
 
 async function checkAdmin() {
   const { userId } = await auth();
-  return userId === process.env.ADMIN_USER_ID;
+  return isAdmin(userId);
 }
 
 export async function GET() {

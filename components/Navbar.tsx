@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from './AuthProvider';
 import { SignInButton } from '@clerk/nextjs';
-import { LogOut, UserCircle, BookOpen, Wand2, Menu, X, ExternalLink, Sparkles, Shield, LayoutGrid, Info } from 'lucide-react';
+import { LogOut, UserCircle, BookOpen, Wand2, Menu, X, ExternalLink, Sparkles, Shield, Info } from 'lucide-react';
 
 const navLinks = [
   { href: '/browse', label: 'Library', icon: BookOpen },
@@ -19,6 +19,15 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); return; }
+    fetch('/api/user/admin')
+      .then((r) => r.json())
+      .then((data) => setIsAdmin(Boolean(data.isAdmin)))
+      .catch(() => setIsAdmin(false));
+  }, [user]);
 
   return (
     <>
@@ -62,7 +71,7 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              {user?.uid === 'user_3D2mTRz6ayzEetjSXk9xF94sC5u' && (
+              {isAdmin && (
                 <Link
                   href="/admin"
                   className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${
@@ -163,7 +172,7 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              {user?.uid === 'user_3D2mTRz6ayzEetjSXk9xF94sC5u' && (
+              {isAdmin && (
                 <Link
                   href="/admin"
                   onClick={() => setMobileOpen(false)}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import {
@@ -8,6 +8,7 @@ import {
   GraduationCap, Check, ArrowRight,
 } from 'lucide-react';
 import { useAuth } from './AuthProvider';
+import type { UserTierResponse } from '@/lib/types';
 
 const STORAGE_KEY = 'bfl_onboarded';
 
@@ -16,7 +17,8 @@ const STORAGE_KEY = 'bfl_onboarded';
 export function OnboardingModal() {
   const { user, loading: authLoading } = useAuth();
   const [show, setShow] = useState(false);
-  const [tierData, setTierData] = useState<any>(null);
+  const [tierData, setTierData] = useState<UserTierResponse | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (authLoading || !user) return;
@@ -36,6 +38,23 @@ export function OnboardingModal() {
     return () => clearTimeout(t);
   }, [user, authLoading]);
 
+  // Focus the close button when modal opens
+  useEffect(() => {
+    if (show) {
+      setTimeout(() => closeButtonRef.current?.focus(), 50);
+    }
+  }, [show]);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!show) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') dismiss();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [show]);
+
   const dismiss = () => {
     localStorage.setItem(STORAGE_KEY, '1');
     setShow(false);
@@ -50,7 +69,12 @@ export function OnboardingModal() {
   return (
     <AnimatePresence>
       {show && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6">
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="onboarding-title"
+        >
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -70,6 +94,7 @@ export function OnboardingModal() {
             {/* Header */}
             <div className="bg-[#1E3A8A] px-8 pt-8 pb-10 text-center relative">
               <button
+                ref={closeButtonRef}
                 onClick={dismiss}
                 className="absolute top-4 right-4 p-2 rounded-xl text-blue-300 hover:text-white hover:bg-white/10 transition-colors"
                 aria-label="Close"
@@ -80,7 +105,7 @@ export function OnboardingModal() {
               <div className="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border-4 border-yellow-300 shadow-lg">
                 <span className="text-blue-900 font-black text-2xl">B</span>
               </div>
-              <h2 className="text-2xl font-black text-white tracking-tight mb-1 uppercase">
+              <h2 id="onboarding-title" className="text-2xl font-black text-white tracking-tight mb-1 uppercase">
                 Welcome to BibleFunLand!
               </h2>
               <p className="text-blue-200 text-sm font-medium">
