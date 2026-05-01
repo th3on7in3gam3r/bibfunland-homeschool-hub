@@ -151,7 +151,7 @@ export function TestimonialsSection() {
                     <h4 className="font-black text-stone-900 uppercase tracking-tight text-sm">{t.userName}</h4>
                     <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">{t.role}</p>
                   </div>
-                  {user?.uid === t.createdBy && (
+                  {user && t.createdBy && user.uid === t.createdBy && (
                     <button onClick={() => handleDelete(t.id)} className="p-2 text-stone-300 hover:text-red-500 transition-colors" title="Delete">
                       <Trash2 className="w-4 h-4" />
                     </button>

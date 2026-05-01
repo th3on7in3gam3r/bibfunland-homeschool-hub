@@ -184,23 +184,6 @@ export default function GeneratePage() {
             </div>
           </div>
 
-          {!loading && !user ? (
-            <div className="text-center py-16 bg-blue-50 rounded-[32px] border-4 border-dashed border-blue-100">
-              <User className="w-10 h-10 text-blue-400 mx-auto mb-6" />
-              <p className="text-xl font-black text-stone-800 mb-4 uppercase tracking-tight">
-                Access Denied
-              </p>
-              <p className="text-sm font-medium text-stone-500 mb-8 px-12 leading-relaxed">
-                Please sign in to your educator account to access the AI
-                worksheet generator.
-              </p>
-              <SignInButton mode="modal">
-                <button className="bg-[#3B82F6] text-white px-8 py-3 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg border-b-4 border-[#2563EB] hover:bg-blue-400 active:translate-y-1 active:border-b-0 transition-all font-sans">
-                  Sign In
-                </button>
-              </SignInButton>
-            </div>
-          ) : (
             <form onSubmit={handleGenerate} className="space-y-8">
               {/* Quick Templates */}
               <div className="space-y-4">
@@ -286,7 +269,7 @@ export default function GeneratePage() {
                     </label>
                     <div className="grid grid-cols-2 gap-3">
                       {GRADE_RANGES.map((range) => {
-                        const locked = !canAccessGrade(tier, range);
+                        const locked = user && !canAccessGrade(tier, range);
                         return (
                           <button
                             key={range}
@@ -346,7 +329,7 @@ export default function GeneratePage() {
               )}
 
               {/* Usage indicator */}
-              {usageData && (
+              {user && usageData && (
                 <div className="bg-stone-50 rounded-2xl p-4 border border-stone-100">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-black text-stone-500 uppercase tracking-widest">
@@ -370,7 +353,16 @@ export default function GeneratePage() {
               )}
 
               <div className="pt-2">
-                {atLimit ? (
+                {!user ? (
+                  <SignInButton mode="modal">
+                    <button
+                      type="button"
+                      className="w-full bg-stone-900 text-white py-5 rounded-[24px] font-black text-lg uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-stone-800 transition-all shadow-xl active:translate-y-1 h-20"
+                    >
+                      Sign In to Generate <ArrowRight className="w-6 h-6 text-yellow-400" />
+                    </button>
+                  </SignInButton>
+                ) : atLimit ? (
                   <div className="text-center space-y-3">
                     <p className="text-sm font-bold text-stone-600 bg-amber-50 rounded-2xl p-4 border border-amber-100">
                       You've used all {usageData?.limit} pack generation{(usageData?.limit as number) === 1 ? '' : 's'} for this month on the {TIERS[tier].name} plan.
@@ -395,14 +387,14 @@ export default function GeneratePage() {
                       </>
                     ) : (
                       <>
-                        Generate {tierLimits.worksheetsPerPack} Worksheets <ArrowRight className="w-6 h-6" />
+                        Generate {TIERS[tier].limits.worksheetsPerPack} Worksheets <ArrowRight className="w-6 h-6 text-yellow-400" />
                       </>
                     )}
                   </button>
                 )}
               </div>
             </form>
-          )}
+
 
           <div className="mt-10 pt-10 border-t border-stone-100 flex items-center gap-4 text-stone-300">
             <BookOpen className="w-6 h-6 opacity-30" />

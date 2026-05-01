@@ -4,10 +4,10 @@ import { BookOpen, Heart } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
-  { href: '/how-it-works', label: 'How It Works' },
   { href: '/browse', label: 'Library' },
   { href: '/generate', label: 'Create' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/about', label: 'About' },
   { href: '/profile', label: 'Profile' },
 ];
 

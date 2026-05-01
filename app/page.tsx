@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import {
   PlusCircle, Scroll, Book, Printer, Heart,
   Star, Sparkles, Wand2, BookOpen, Download,
-  ArrowRight, Users, FileText,
+  ArrowRight, Users, FileText, Gamepad2,
 } from 'lucide-react';
 
 import { Navbar } from '@/components/Navbar';
@@ -89,20 +89,20 @@ export default function Home() {
               href="/generate"
               className="bg-yellow-400 text-blue-900 px-8 py-4 rounded-2xl font-black text-base hover:bg-yellow-300 transition-all flex items-center justify-center gap-2 shadow-xl border-b-4 border-yellow-600 active:translate-y-1 active:border-b-0 uppercase tracking-widest"
             >
-              <Wand2 className="w-5 h-5" /> Create a Pack Free
+              <Wand2 className="w-5 h-5" /> Generate Your Pack
             </Link>
             <Link
-              href="/browse"
+              href="/pack/1f96b90e-d875-4ded-bf82-d973d518bc33"
               className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2 border-2 border-white/20 uppercase tracking-widest"
             >
-              <Download className="w-5 h-5" /> Free Starter Packs
+              <Download className="w-5 h-5" /> Free Noah's Ark Pack
             </Link>
 
             <Link
               href="/browse"
               className="bg-transparent hover:bg-white/5 text-blue-100 px-8 py-4 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2 uppercase tracking-widest"
             >
-              <BookOpen className="w-5 h-5" /> Browse All
+              <BookOpen className="w-5 h-5" /> Browse Library
             </Link>
 
           </motion.div>
@@ -115,10 +115,11 @@ export default function Home() {
             className="mt-14 grid grid-cols-3 gap-4 max-w-lg mx-auto"
           >
             {[
-              { icon: FileText, value: '30s', label: 'Pack ready to print' },
+              { icon: FileText, value: '~30 seconds', label: 'Pack ready to print' },
               { icon: Users, value: '3–12', label: 'Ages served' },
               { icon: Book, value: '100%', label: 'Scripture-grounded' },
             ].map(({ icon: Icon, value, label }) => (
+
               <div key={label} className="text-center">
                 <Icon className="w-5 h-5 text-yellow-300 mx-auto mb-1" />
                 <p className="text-xl font-black text-white">{value}</p>
@@ -193,6 +194,33 @@ export default function Home() {
               <PlusCircle className="w-5 h-5" /> Start Creating — It's Free
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ── BibleFunLand Games Cross-link ────────────────── */}
+      <section className="bg-gradient-to-r from-yellow-50 to-amber-50 border-y-2 border-yellow-100 py-6 px-6">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shrink-0 border-2 border-yellow-300 shadow-sm">
+              <Gamepad2 className="w-6 h-6 text-blue-900" />
+            </div>
+            <div>
+              <p className="font-black text-stone-900 text-sm uppercase tracking-tight">
+                Also on BibleFunLand.com
+              </p>
+              <p className="text-stone-500 text-xs font-medium">
+                Interactive Bible games, memory verse challenges & more for kids
+              </p>
+            </div>
+          </div>
+          <a
+            href="https://biblefunland.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-yellow-400 text-blue-900 px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-yellow-300 transition-all shadow-sm border-b-2 border-yellow-600 shrink-0"
+          >
+            Play Bible Games <ArrowRight className="w-3.5 h-3.5" />
+          </a>
         </div>
       </section>
 
@@ -369,7 +397,8 @@ export default function Home() {
           className="flex items-center justify-center gap-2 bg-green-600 text-white py-4 rounded-2xl font-bold shadow-2xl animate-bounce-subtle"
         >
           <BookOpen className="w-5 h-5" />
-          Browse 100+ Free Packs
+          Browse Our Growing Library
+
         </Link>
       </div>
     </div>
